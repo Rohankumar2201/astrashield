@@ -1,0 +1,150 @@
+/* app/globals.css — Global styles for AstraShield */
+
+/* Import cyberpunk fonts from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── CSS Variables ─────────────────────────────────────────────────────────── */
+:root {
+  --bg-deep:       #020818;
+  --bg-card:       #040d1f;
+  --bg-card-hover: #071428;
+  --border:        rgba(13, 148, 136, 0.2);
+  --border-bright: rgba(13, 148, 136, 0.5);
+  --teal:          #0d9488;
+  --teal-bright:   #2dd4bf;
+  --text-primary:  #e2e8f0;
+  --text-muted:    #64748b;
+  --danger:        #ef4444;
+  --warning:       #f97316;
+  --caution:       #eab308;
+  --safe:          #22c55e;
+}
+
+/* ── Base Styles ─────────────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: 'IBM Plex Sans', sans-serif;
+  min-height: 100vh;
+  /* Subtle scanline overlay for the cyberpunk effect */
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.03) 2px,
+      rgba(0, 0, 0, 0.03) 4px
+    );
+}
+
+/* ── Custom Scrollbar ─────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--teal); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--teal-bright); }
+
+/* ── Component Classes ────────────────────────────────────────────────────── */
+@layer components {
+
+  /* Card — the main container box used everywhere */
+  .card {
+    @apply bg-void-800 border border-teal-700/30 rounded-lg p-6;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(13,148,136,0.1);
+  }
+
+  .card-hover {
+    @apply card transition-all duration-300 cursor-pointer;
+  }
+  .card-hover:hover {
+    @apply border-teal-600/60;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 24px rgba(13,148,136,0.15);
+    transform: translateY(-2px);
+  }
+
+  /* Button variants */
+  .btn-primary {
+    @apply px-6 py-3 bg-teal-600 hover:bg-teal-500 text-white font-body font-semibold
+           rounded-md transition-all duration-200 flex items-center gap-2;
+    box-shadow: 0 0 20px rgba(13,148,136,0.3);
+  }
+  .btn-primary:hover {
+    box-shadow: 0 0 30px rgba(13,148,136,0.5);
+    transform: translateY(-1px);
+  }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:disabled {
+    @apply opacity-50 cursor-not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn-ghost {
+    @apply px-4 py-2 border border-teal-700/40 hover:border-teal-500 text-teal-400
+           hover:text-teal-300 font-body rounded-md transition-all duration-200;
+  }
+
+  /* Glowing teal text */
+  .text-glow {
+    color: var(--teal-bright);
+    text-shadow: 0 0 10px rgba(13,148,136,0.8), 0 0 20px rgba(13,148,136,0.4);
+  }
+
+  /* Risk category badges */
+  .badge-low      { @apply px-3 py-1 rounded-full text-xs font-mono font-bold bg-green-900/40 text-green-400 border border-green-700/40; }
+  .badge-medium   { @apply px-3 py-1 rounded-full text-xs font-mono font-bold bg-yellow-900/40 text-yellow-400 border border-yellow-700/40; }
+  .badge-high     { @apply px-3 py-1 rounded-full text-xs font-mono font-bold bg-orange-900/40 text-orange-400 border border-orange-700/40; }
+  .badge-critical { @apply px-3 py-1 rounded-full text-xs font-mono font-bold bg-red-900/40 text-red-400 border border-red-700/40; }
+
+  /* Section label (small caps above headings) */
+  .section-label {
+    @apply text-xs font-mono text-teal-500 tracking-widest uppercase mb-2;
+  }
+
+  /* Horizontal rule with teal glow */
+  .divider {
+    @apply border-t border-teal-900/50 my-6;
+  }
+
+  /* Data table */
+  .data-table { @apply w-full text-sm; }
+  .data-table th { @apply text-left text-xs font-mono text-teal-500 uppercase tracking-wider pb-3 border-b border-teal-900/40; }
+  .data-table td { @apply py-3 border-b border-void-700/50 text-slate-300; }
+  .data-table tr:last-child td { @apply border-0; }
+}
+
+/* ── Utility Classes ──────────────────────────────────────────────────────── */
+@layer utilities {
+  .font-display { font-family: 'Orbitron', sans-serif; }
+  .font-mono    { font-family: 'Space Mono', monospace; }
+  .font-body    { font-family: 'IBM Plex Sans', sans-serif; }
+
+  /* Grid overlay effect for backgrounds */
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(13,148,136,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(13,148,136,0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Glassmorphism panel */
+  .glass {
+    background: rgba(4, 13, 31, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(13, 148, 136, 0.2);
+  }
+}

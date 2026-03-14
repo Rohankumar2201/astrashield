@@ -1,0 +1,40 @@
+# .gitignore — Files NOT to commit to GitHub
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+*.so
+venv/
+env/
+.env           # NEVER commit real .env files! They contain passwords.
+*.pth          # PyTorch model weights (too large for git — use Git LFS or store separately)
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+npm-debug.log*
+.npm
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Uploads (don't commit user files)
+backend/uploads/
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+logs/

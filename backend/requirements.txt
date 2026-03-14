@@ -1,0 +1,49 @@
+# ── Web Framework ──────────────────────────────────────────────────────────────
+fastapi==0.111.0          # The web framework that handles API requests
+uvicorn==0.30.1           # The server that runs FastAPI
+python-multipart==0.0.9   # Needed to accept file uploads in FastAPI
+
+# ── Background Tasks ───────────────────────────────────────────────────────────
+celery==5.4.0             # Runs AI analysis jobs in the background
+redis==5.0.7              # Message broker between FastAPI and Celery
+
+# ── Database ───────────────────────────────────────────────────────────────────
+sqlalchemy==2.0.31        # Talks to PostgreSQL database
+psycopg2-binary==2.9.9    # PostgreSQL driver for Python
+pymongo==4.7.3            # Talks to MongoDB database
+motor==3.5.1              # Async MongoDB driver
+
+# ── File Storage ───────────────────────────────────────────────────────────────
+minio==7.2.7              # Stores uploaded files (like Amazon S3 but self-hosted)
+python-magic==0.4.27      # Detects what type of file was uploaded
+
+# ── AI / Machine Learning ──────────────────────────────────────────────────────
+torch==2.3.0              # PyTorch — the main deep learning library
+torchvision==0.18.0       # Image models and transforms for PyTorch
+timm==1.0.3               # EfficientNet and other pretrained models
+scikit-learn==1.5.0       # Platt scaling and scoring utilities
+numpy==1.26.4             # Number crunching (used by all ML libraries)
+
+# ── Image Processing ───────────────────────────────────────────────────────────
+opencv-python==4.10.0.82  # Image analysis, ELA, face detection
+Pillow==10.3.0            # Open and manipulate image files
+
+# ── Audio Processing ───────────────────────────────────────────────────────────
+librosa==0.10.2           # Convert audio to spectrograms
+soundfile==0.12.1         # Read audio files (WAV, MP3, etc.)
+
+# ── PDF / Document ─────────────────────────────────────────────────────────────
+PyMuPDF==1.24.5           # Read PDF files
+pytesseract==0.3.10       # OCR — reads text from images
+ExifRead==3.0.0           # Extract EXIF metadata from images
+
+# ── Auth & Security ────────────────────────────────────────────────────────────
+python-jose==3.3.0        # JWT token creation and validation
+passlib==1.7.4            # Password hashing
+bcrypt==4.1.3             # Secure password storage
+
+# ── Utilities ──────────────────────────────────────────────────────────────────
+python-dotenv==1.0.1      # Loads .env environment variable files
+pydantic==2.7.4           # Data validation (FastAPI uses this heavily)
+httpx==0.27.0             # HTTP client (for testing)
+aiofiles==23.2.1          # Async file reading/writing
