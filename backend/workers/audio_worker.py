@@ -18,10 +18,15 @@ from database import jobs_collection, analysis_collection
 from utils.storage import download_from_minio
 from scoring.ensemble import compute_final_score
 
-import torch
-import torchvision.transforms as transforms
-import torchvision.models as models
-import torch.nn as nn
+try:
+    import torch
+    import torchvision.transforms as transforms
+    import torchvision.models as models
+    import torch.nn as nn
+    TORCH_AVAILABLE = True
+except ImportError:
+    TORCH_AVAILABLE = False
+    print("⚠️ PyTorch not available - running in demo mode")
 import librosa
 import numpy as np
 import io

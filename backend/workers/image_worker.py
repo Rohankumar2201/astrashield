@@ -18,10 +18,15 @@ from utils.metadata import analyze_metadata
 from utils.ela import compute_ela
 from scoring.ensemble import compute_final_score
 
-import torch
-import torch.nn as nn
-import torchvision.transforms as transforms
-import timm  # Library with pretrained models like EfficientNet
+try:
+    import torch
+    import torch.nn as nn
+    import torchvision.transforms as transforms
+    import timm
+    TORCH_AVAILABLE = True
+except ImportError:
+    TORCH_AVAILABLE = False
+    print("⚠️ PyTorch not available - running in demo mode")  # Library with pretrained models like EfficientNet
 import numpy as np
 import cv2
 import io
