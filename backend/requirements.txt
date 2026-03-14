@@ -18,9 +18,9 @@ minio==7.2.7              # Stores uploaded files (like Amazon S3 but self-hoste
 python-magic==0.4.27      # Detects what type of file was uploaded
 
 # ── AI / Machine Learning ──────────────────────────────────────────────────────
-torch==2.3.0              # PyTorch — the main deep learning library
-torchvision==0.18.0       # Image models and transforms for PyTorch
-timm==1.0.3               # EfficientNet and other pretrained models
+#torch==2.3.0              # PyTorch — the main deep learning library
+#torchvision==0.18.0       # Image models and transforms for PyTorch
+#timm==1.0.3               # EfficientNet and other pretrained models
 scikit-learn==1.5.0       # Platt scaling and scoring utilities
 numpy==1.26.4             # Number crunching (used by all ML libraries)
 
