@@ -38,10 +38,10 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],    # Allow GET, POST, PUT, DELETE, etc.
-    allow_headers=["*"],    # Allow all request headers
-)
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+) 
 
 # ── Register Routes ────────────────────────────────────────────────────────────
 # Each router handles a specific group of endpoints
