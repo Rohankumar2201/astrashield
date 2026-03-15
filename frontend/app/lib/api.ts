@@ -5,7 +5,7 @@
 import axios from "axios";
 
 // Base URL of the backend. Set in .env.local
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_BASE = "";
 
 // Create an axios instance with default settings
 export const api = axios.create({
