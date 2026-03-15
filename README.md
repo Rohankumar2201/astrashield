@@ -1,65 +1,48 @@
 # 🛡️ AstraShield — AI Deepfake & Identity Fraud Detection
 
-A full-stack web app that detects deepfakes, voice clones, and forged documents using AI.
+An AI-powered cybersecurity platform that detects deepfakes, voice clones, and forged identity documents.
 
----
+## 🌐 Live Demo
+- **Website:** https://astrashield-rho.vercel.app
+- **API Docs:** https://astrashield.onrender.com/docs
+
+
+
+## 🔍 What It Does
+- Detects AI-generated deepfake images
+- Detects voice cloning and synthetic audio
+- Detects forged identity documents
+- Analyzes metadata for AI generation signatures
+- Produces a Fraud Risk Score (0-100)
+
+## 🛠️ Tech Stack
+- **Frontend:** Next.js 14, Tailwind CSS
+- **Backend:** Python FastAPI, Celery
+- **AI Models:** EfficientNet-B4, ResNet-18
+- **Databases:** MongoDB Atlas, PostgreSQL
+- **Queue:** Redis (Upstash)
+- **Deployment:** Vercel + Render
 
 ## 📁 Project Structure
-
 ```
 astrashield/
-├── frontend/          ← Next.js website (what users see)
-├── backend/           ← Python FastAPI server (the brain)
-├── models/            ← AI model files and training scripts
-├── docker/            ← Docker configuration
-└── tests/             ← Test files
+├── frontend/     → Next.js dashboard
+├── backend/      → FastAPI + Celery
+├── models/       → AI model training scripts
+├── scripts/      → Setup and demo scripts
+└── docker/       → Docker configuration
 ```
 
----
+## 🚀 Run Locally
+1. Clone the repo
+2. Install Docker Desktop
+3. Run `docker compose up postgres mongo redis minio -d`
+4. Run `cd backend && pip install -r requirements.txt`
+5. Run `cd backend && uvicorn main:app --reload --port 8000`
+6. Run `cd frontend && npm install && npm run dev`
+7. Open https://astrashield-rho.vercel.app
 
-## 🚀 Quick Start (Step by Step)
-
-### Step 1 — Install Node.js
-Download from: https://nodejs.org  (choose "LTS" version)
-After installing, restart your terminal and run: `node --version`
-
-### Step 2 — Install Python packages
-```bash
-cd backend
-pip install -r requirements.txt
+## 👨‍💻 Developer
+Rohan Kumar — Engineering Student
+GitHub: https://github.com/Rohankumar2201
 ```
-
-### Step 3 — Install and start Redis (for background tasks)
-**Windows:** Download Redis from https://github.com/tporadowski/redis/releases
-**Mac:** `brew install redis && brew services start redis`
-**Linux:** `sudo apt install redis-server && sudo service redis start`
-
-### Step 4 — Start the Backend
-```bash
-cd backend
-uvicorn main:app --reload --port 8000
-```
-
-### Step 5 — Start the Celery Worker (background task processor)
-Open a NEW terminal window:
-```bash
-cd backend
-celery -A celery_app worker --loglevel=info
-```
-
-### Step 6 — Start the Frontend
-Open ANOTHER new terminal window:
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-### Step 7 — Open your browser
-Go to: http://localhost:3000
-
----
-
-## 🔑 Environment Variables
-
-Copy `.env.example` to `.env` in both `frontend/` and `backend/` and fill in your values.
