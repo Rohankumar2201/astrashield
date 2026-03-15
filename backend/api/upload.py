@@ -50,10 +50,9 @@ class UploadResponse(BaseModel):
 
 @router.post("/", response_model=UploadResponse)
 async def upload_file(
-    file: UploadFile = File(...),  # "..." means this field is required
+    file: UploadFile = File(...),
     notes: str = "",
-    db: Session = Depends(get_db)
-):
+):    
     """
     Upload a media file for fraud analysis.
     
@@ -97,17 +96,8 @@ async def upload_file(
         with open(f"uploads/{job_id}/{file.filename}", "wb") as f_out:
             f_out.write(contents)
 
-    # ── Step 6: Create a Case record in PostgreSQL ────────────────────────────
-    case = Case(
-        job_id=job_id,
-        filename=file.filename,
-        file_type=media_type,
-        file_size_bytes=len(contents),
-        status="queued",
-        notes=notes
-    )
-    db.add(case)
-    db.commit()
+    # PostgreSQL disabled for deployment - using MongoDB only
+    pass
 
     # ── Step 7: Create job status in MongoDB ──────────────────────────────────
     await jobs_collection.insert_one({
