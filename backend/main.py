@@ -30,6 +30,19 @@ app = FastAPI(
     docs_url="/docs",      # Visit http://localhost:8000/docs to see all endpoints
     redoc_url="/redoc"
 )
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+
+class CORSFixMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "*"
+        return response
+
+app.add_middleware(CORSFixMiddleware)
 
 # ── CORS Middleware ────────────────────────────────────────────────────────────
 # CORS = Cross-Origin Resource Sharing
