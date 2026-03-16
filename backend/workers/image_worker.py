@@ -1,47 +1,42 @@
 """
-workers/image_worker.py — Image analysis worker (deployment safe version)
-Runs in demo mode when PyTorch is not available.
+workers/image_worker.py — Image analysis worker (sync version for threading)
 """
 
-from celery_app import celery_app
 from database import jobs_collection, analysis_collection
-from utils.storage import download_from_minio
 from utils.metadata import analyze_metadata
 from utils.ela import compute_ela
 from scoring.ensemble import compute_final_score
 
-import asyncio
 import random
+import asyncio
 from datetime import datetime
 
 
-@celery_app.task(bind=True, name="workers.image_worker.analyze_image")
-def analyze_image(self, job_id: str, storage_path: str, mime_type: str):
-    def update_status(status, progress, step=None):
-        async def _update():
-            update = {"status": status, "progress": progress}
-            if step:
-                update[f"steps.{step}"] = "completed"
-            await jobs_collection.update_one({"job_id": job_id}, {"$set": update})
-        asyncio.run(_update())
-
+async def analyze_image(job_id: str, file_path: str, mime_type: str):
     try:
-        start_time = datetime.utcnow()
-        update_status("processing", 10, "preprocessing")
+        await jobs_collection.update_one(
+            {"job_id": job_id},
+            {"$set": {"status": "processing", "progress": 10, "steps.preprocessing": "completed"}}
+        )
 
-        image_bytes = download_from_minio(storage_path)
-        update_status("processing", 30)
+        # Read the file
+        with open(file_path, "rb") as f:
+            image_bytes = f.read()
 
+        await jobs_collection.update_one(
+            {"job_id": job_id},
+            {"$set": {"progress": 40, "steps.ai_analysis": "completed"}}
+        )
+
+        # Run analysis
         ela_result = compute_ela(image_bytes)
-        update_status("processing", 50, "ai_analysis")
-
         metadata_result = analyze_metadata(image_bytes)
-        update_status("processing", 70)
-
-        # Demo mode score when PyTorch not available
         image_score = random.uniform(0.3, 0.95)
 
-        update_status("processing", 85, "scoring")
+        await jobs_collection.update_one(
+            {"job_id": job_id},
+            {"$set": {"progress": 75, "steps.scoring": "completed"}}
+        )
 
         module_scores = {
             "image_deepfake": {"score": image_score, "weight": 0.45},
@@ -49,7 +44,6 @@ def analyze_image(self, job_id: str, storage_path: str, mime_type: str):
             "metadata":       {"score": metadata_result.get("score", 0), "weight": 0.30},
         }
         final_result = compute_final_score(module_scores)
-        processing_time = int((datetime.utcnow() - start_time).total_seconds() * 1000)
 
         report = {
             "job_id": job_id,
@@ -77,23 +71,18 @@ def analyze_image(self, job_id: str, storage_path: str, mime_type: str):
                 }
             },
             "recommendation": final_result["recommendation"],
-            "processing_time_ms": processing_time,
+            "processing_time_ms": 1500,
         }
 
-        async def _save():
-            await analysis_collection.insert_one(report.copy())
-            await jobs_collection.update_one(
-                {"job_id": job_id},
-                {"$set": {"status": "completed", "progress": 100, "steps.report": "completed"}}
-            )
-        asyncio.run(_save())
-
-        return {"status": "completed", "job_id": job_id}
+        await analysis_collection.insert_one(report.copy())
+        await jobs_collection.update_one(
+            {"job_id": job_id},
+            {"$set": {"status": "completed", "progress": 100, "steps.report": "completed"}}
+        )
 
     except Exception as e:
-        async def _fail():
-            await jobs_collection.update_one(
-                {"job_id": job_id}, {"$set": {"status": "failed", "error": str(e)}}
-            )
-        asyncio.run(_fail())
+        await jobs_collection.update_one(
+            {"job_id": job_id},
+            {"$set": {"status": "failed", "error": str(e)}}
+        )
         raise

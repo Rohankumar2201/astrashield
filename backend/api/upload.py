@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from datetime import datetime
 import uuid
 import os
+import asyncio
 
 from database import jobs_collection
 from utils.file_validator import validate_file
@@ -84,20 +85,13 @@ async def upload_file(
         }
     })
 
-    # Process directly without Celery
-    import asyncio
-    from threading import Thread
-
-    def run_analysis():
-        if media_type == "image":
-          analyze_image(job_id, file_path, detected_mime)
-        elif media_type == "audio":
-          analyze_audio(job_id, file_path)
-        elif media_type == "document":
-          analyze_document(job_id, file_path)
-
-    thread = Thread(target=run_analysis)
-    thread.start()
+    # Run analysis using asyncio
+    if media_type == "image":
+        asyncio.create_task(analyze_image(job_id, file_path, detected_mime))
+    elif media_type == "audio":
+        asyncio.create_task(analyze_audio(job_id, file_path))
+    elif media_type == "document":
+        asyncio.create_task(analyze_document(job_id, file_path))
 
     return UploadResponse(
         job_id=job_id,
