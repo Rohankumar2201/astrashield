@@ -84,13 +84,20 @@ async def upload_file(
         }
     })
 
-    # Dispatch background task
-    if media_type == "image":
-        analyze_image.delay(job_id, file_path, detected_mime)
-    elif media_type == "audio":
-        analyze_audio.delay(job_id, file_path)
-    elif media_type == "document":
-        analyze_document.delay(job_id, file_path)
+    # Process directly without Celery
+    import asyncio
+    from threading import Thread
+
+    def run_analysis():
+        if media_type == "image":
+          analyze_image(job_id, file_path, detected_mime)
+        elif media_type == "audio":
+          analyze_audio(job_id, file_path)
+        elif media_type == "document":
+          analyze_document(job_id, file_path)
+
+    thread = Thread(target=run_analysis)
+    thread.start()
 
     return UploadResponse(
         job_id=job_id,
